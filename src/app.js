@@ -1,6 +1,7 @@
 import Product from './models/product.model.js';
 import express from 'express';
 import mongoose from 'mongoose';
+import routerProduct from './routers/product.router.js';
 
 const app = express();
 app.use(express.json());
@@ -15,10 +16,14 @@ app.use(express.json());
 // }
 // delete: xóa dữ liệu
 
-app.use('/ahihi', function (req, res) {
-	console.log('first');
-	console.log('first');
-	res.send('Hello World');
+app.post('/ahihi', async (req, res) => {
+	const data = {
+		nameProduct: 'name 1',
+		price: 1000,
+		imageProduct: 'acbabc',
+	};
+	const resutl = await Product.create(data);
+	return res.json(resutl);
 });
 
 /* connect mongoose */
@@ -36,16 +41,19 @@ app.use('/ahihi', function (req, res) {
 // main();
 // c2: then/catch
 mongoose
-	.connect('mongodb://127.0.0.1:27017/demo2', {
-		useNewUrlParser: true, // đọc dữ liệu từ db
-		useUnifiedTopology: true,
-	})
+	// .connect('mongodb://127.0.0.1:27017/demo2')
+	// .connect('mongodb://127.0.0.1:27017/marathon-node-be-demo')
+	.connect(
+		'mongodb+srv://hungdang02042003:tReZxHuWnYtxnAs5@cluster0.g2nfbra.mongodb.net/'
+	)
 	.then(() => {
 		console.log('connect success');
 	})
 	.catch(() => {
 		console.log('connect fail');
 	});
+
+// mk: hungdang02042003- tReZxHuWnYtxnAs5
 
 // sql => table
 // nosql => collection
@@ -63,8 +71,11 @@ const createProduct = async (request, response) => {
 	}
 };
 
-app.post('/products', createProduct);
+// router
+app.use('/api', routerProduct);
 
-app.listen(3000, function () {
-	console.log('App listening on port 3000!');
+app.listen(4000, function () {
+	console.log('App listening on port 4000!');
 });
+
+// port be: 3000 -> mongodb online
